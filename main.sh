@@ -1,44 +1,10 @@
 #!/bin/bash
 source ./color.sh
-#######################
-### ERROR HANDELING ###
-#######################
+source ./splashtxt.sh
+source ./errors.sh
+source ./menu.sh
 
-# Checks if the input is number
-numinputcheck() {
-  option="$1"
-  numvalidity=1 # Initialize validity variable
-
-  if [[ "$option" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
-    numvalidity=0 # Valid number
-  else
-    numvalidity=1 # Invalid number
-    echoERROR "Invalid input. Provide a numbre within the range."
-  fi
-}
-# Checks if the input is word
-wordinputcheck() {
-  option="$1"
-  wordvalidity=1 # Initialize validity variable
-  if [[ "$option" =~ ^[a-zA-Z]+$ ]]; then
-    wordvalidity=0 # Valid word
-  else
-    wordvalidity=1 # Invalid word
-    echoERROR "Invalid input. Provide a combenetion of letters."
-  fi
-}
-# Checks if the input is ascii
-assciiinputcheck() {
-  option="$1"
-  asciivalidity=1
-  if [[ "$option" =~ ^[a-zA-Z]+$ ]] || [[ "$option" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
-    asciivalidity=0 # Valid ASCII
-  else
-    asciivalidity=1 # Invalid ASCII
-    echoERROR "Invalid input. Provide a combenetion of ascii charachters."
-  fi
-}
-
+numvalidity=1
 ###############
 ### SENARIO ###
 ###############
@@ -47,15 +13,13 @@ assciiinputcheck() {
 ### WELCOME ###
 ################
 
-echo "NAME THE VESSAL." # Gameplay part
-
+echo "NAME THE VESSAL."
 # Checks if the name is asscii
 asciivalidity=1
 while [[ asciivalidity -eq 1 ]]; do
   read -p "~ " name
   assciiinputcheck "$name"
 done
-
 debug="220" # Enables debug
 egg0="mh"
 egg1="Erfan" #Checks if Erfan # lightblue
@@ -79,35 +43,10 @@ fi
 #################
 ### MAIN MENU ###
 #################
-clear
-menu_art="
-
-
-
-   ▌ ▐·      ▪  ·▄▄▄▄    
-  ▪█·█▌ ▄█▀▄ ██ ██· ██   
-  ▐█▐█•▐█▌.▐▌▐█·▐█▪ ▐█▌  
-   ███ ▐█▌.▐▌▐█▌██. ██   
-  . ▀   ▀█▄▀▪▀▀▀▀▀▀▀▀•  
-
-
-
-
-"
-
-# Get the length of the longest line in the ASCII art
-art_length=$(echo "$menu_art" | wc -L)
-# Get the current width of the terminal
-terminal_width=$(tput cols)
-# Calculate padding for centering the ASCII art
-padding=$(((terminal_width - art_length) / 2))
-# Loop through each line of the ASCII art
-while IFS= read -r line; do
-  printf "%${padding}s%s\n" "" "$line"
-done <<<"$menu_art"
-
-### splash text
-
+Backtothebegnings() {
+  clear
+  mainmenu
+}
 if [[ $debug -eq 0 ]]; then
   echored " DEBUG MODE ENABLED"
 elif [[ $nameegg -eq 0 ]]; then
@@ -117,7 +56,37 @@ elif [[ $nameegg -eq 1 ]]; then
 elif [[ $nameegg -eq 2 ]]; then
   echocyan "  Pycharm is the worst programing app ever. =]"
 else
-  echo "  INPROGRASS"
+  splashtext
+fi
+echo ""
+echo ""
+while [[ $numvalidity = 1 ]]; do
+  read -p "> " start
+  numinputcheck "$start"
+done
+numvalidity=1
+if [[ $start -eq 0 ]]; then
+  echocrimson "Farewell =]"
+  exit
+elif [[ $start -eq 1 ]]; then
+  echogreen "Let's begine..."
+  sleep 2
+else
+  clear
+  echoyellow "Whar are you donig here ?"
+  sleep 1
+  echoyellow "You're not supposed to be here."
+  sleep 2
+  echoyellow "Are you lost ?"
+  echo "  [0]yes [0]no"
+  while [[ $numvalidity = 1 ]]; do
+    read -p "> " choice
+    numinputcheck "$choice"
+  done
+  echoyellow "Oh, Is that so ?"
+  sleep 1
+  echoyellow "Let me put you back"
+  Backtothebegnings
 fi
 
 ############
@@ -134,6 +103,6 @@ if [[ $debug -eq 0 ]]; then
   "
 
   echo "DEBUG STATUS: " $debug
-  echo "EGG STATUS: " "$nameegg"
+  echo "EGG STATUS: " $nameegg
   echo "NAME: " $name
 fi
