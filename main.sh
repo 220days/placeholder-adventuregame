@@ -47,6 +47,8 @@ Backtothebegnings() {
   clear
   mainmenu
 }
+Backtothebegnings
+echo ""
 if [[ $debug -eq 0 ]]; then
   echored " DEBUG MODE ENABLED"
 elif [[ $nameegg -eq 0 ]]; then
@@ -58,7 +60,6 @@ elif [[ $nameegg -eq 2 ]]; then
 else
   splashtext
 fi
-echo ""
 echo ""
 while [[ $numvalidity = 1 ]]; do
   read -p "> " start
@@ -86,6 +87,7 @@ else
   echoyellow "Oh, Is that so ?"
   sleep 1
   echoyellow "Let me put you back"
+  sleep 1
   Backtothebegnings
 fi
 
